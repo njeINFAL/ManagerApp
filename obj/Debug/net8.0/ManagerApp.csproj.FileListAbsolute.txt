@@ -148,10 +148,10 @@ C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebasset
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.ManagerApp.props
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.ManagerApp.props
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\ManagerApp.csproj.Up2Date
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\ManagerApp.dll
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\refint\ManagerApp.dll
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\ManagerApp.pdb
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\ManagerApp.genruntimeconfig.cache
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\ref\ManagerApp.dll
+C:\Users\Rendszergazda\Documents\Repo\ManagerApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
