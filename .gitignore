@@ -1,0 +1,7 @@
+#ignore 
+
+bin/
+obj/
+
+#ignore VS temp files
+.vs/
