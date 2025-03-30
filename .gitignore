@@ -2,6 +2,7 @@
 
 bin/
 obj/
+.DS_Store
 
 #ignore VS temp files
 .vs/
