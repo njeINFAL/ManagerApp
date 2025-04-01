@@ -1,6 +1,7 @@
 ﻿using backend.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -8,6 +9,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Service> Services => Set<Service>();
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
+    public DbSet<WorkOrderService> WorkOrderServicess => Set<WorkOrderService>();
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
@@ -31,6 +33,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(c => c.WorkOrders)
             .HasForeignKey(w => w.CarId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<WorkOrderService>()
+            .HasOne(wos => wos.WorkOrder)
+            .WithMany(wo => wo.WorkOrderServices)
+            .HasForeignKey(wos => wos.WorkOrderId);
+
+        builder.Entity<WorkOrderService>()
+           .HasOne(wos => wos.Service)
+           .WithMany(s => s.WorkOrderServices)
+           .HasForeignKey(wos => wos.ServiceId);
+
     }
 
 

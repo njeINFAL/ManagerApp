@@ -15,5 +15,7 @@
         // Külső kulcs és navigációs property az autóhoz
         public int? CarId { get; set; }
         public Car? Car { get; set; }
+
+        public ICollection<WorkOrderService> WorkOrderServices { get; set; } = new List<WorkOrderService>();
     }
 }

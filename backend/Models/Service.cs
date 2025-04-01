@@ -9,5 +9,7 @@
         public int ServiceDurationMinutes { get; set; }
 
         public int ServicePrice { get; set; }
+
+        public ICollection<WorkOrderService> WorkOrderServices { get; set; } = new List<WorkOrderService>();
     }
 }
