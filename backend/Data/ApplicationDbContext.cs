@@ -49,6 +49,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(wos => wos.ResponsibleUserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<WorkOrderService>()
+            .Property(wos => wos.Status)
+            .HasConversion<string>();
     }
 
 
