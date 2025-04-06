@@ -154,3 +154,4 @@ C:\Users\Rendszergazda\Documents\Repo\ManagerApp\backend\obj\Debug\net8.0\refint
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\backend\obj\Debug\net8.0\backend.pdb
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 C:\Users\Rendszergazda\Documents\Repo\ManagerApp\backend\obj\Debug\net8.0\ref\backend.dll
+C:\Users\Rendszergazda\Documents\Repo\ManagerApp\backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
