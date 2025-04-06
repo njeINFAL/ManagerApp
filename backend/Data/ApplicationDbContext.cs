@@ -53,6 +53,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<WorkOrderService>()
             .Property(wos => wos.Status)
             .HasConversion<string>();
+
+        builder.Entity<WorkOrder>()
+           .HasOne(w => w.User)
+           .WithMany(u => u.WorkOrders)
+           .HasForeignKey(w => w.UserId)
+           .OnDelete(DeleteBehavior.SetNull);
     }
 
 

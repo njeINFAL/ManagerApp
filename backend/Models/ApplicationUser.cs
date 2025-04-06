@@ -12,5 +12,7 @@ namespace backend.Models
         public string? UserHouseNo { get; set; }
 
         public ICollection<Car> Cars { get; set; } = new List<Car>();
+
+        public ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
     }
 }

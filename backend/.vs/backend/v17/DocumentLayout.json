@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|c:\\users\\rendszergazda\\documents\\repo\\managerapp\\backend\\models\\workorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|solutionrelative:models\\workorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|c:\\users\\rendszergazda\\documents\\repo\\managerapp\\backend\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|solutionrelative:models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|c:\\users\\rendszergazda\\documents\\repo\\managerapp\\backend\\models\\workorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|solutionrelative:models\\workorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|c:\\users\\rendszergazda\\documents\\repo\\managerapp\\backend\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|c:\\users\\rendszergazda\\documents\\repo\\managerapp\\backend\\models\\workorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8281E8F-7BB5-4B0F-8C25-F4293725B064}|backend.csproj|solutionrelative:models\\workorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,24 +26,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Models\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Models\\ApplicationUser.cs",
+              "RelativeToolTip": "Models\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T08:16:58.063Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "WorkOrder.cs",
+              "DocumentMoniker": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Models\\WorkOrder.cs",
+              "RelativeDocumentMoniker": "Models\\WorkOrder.cs",
+              "ToolTip": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Models\\WorkOrder.cs",
+              "RelativeToolTip": "Models\\WorkOrder.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwBMAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T08:09:41.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
               "ToolTip": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Data\\ApplicationDbContext.cs",
               "RelativeToolTip": "Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAmwDYAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAmwDoAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-06T08:01:11.906Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "WorkOrderService.cs",
               "DocumentMoniker": "C:\\Users\\Rendszergazda\\Documents\\Repo\\ManagerApp\\backend\\Models\\WorkOrderService.cs",
               "RelativeDocumentMoniker": "Models\\WorkOrderService.cs",
