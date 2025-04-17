@@ -1,0 +1,12 @@
+﻿namespace backend.Models
+{
+    public class WorkOrderService
+    {
+        public int WorkOrderServiceID { get; set; }
+        public int WorkOrderId { get; set; }
+        public WorkOrder WorkOrder { get; set; }
+
+        public int ServiceId { get; set; }
+        public Service Service { get; set; }
+    }
+}
