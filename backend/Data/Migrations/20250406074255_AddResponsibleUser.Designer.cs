@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250406074255_AddResponsibleUser")]
+    partial class AddResponsibleUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,14 +326,9 @@ namespace backend.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("WorkOrderId");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("WorkOrders");
                 });
@@ -348,10 +346,6 @@ namespace backend.Data.Migrations
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WorkOrderId")
                         .HasColumnType("int");
@@ -435,14 +429,7 @@ namespace backend.Data.Migrations
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("backend.Models.ApplicationUser", "User")
-                        .WithMany("WorkOrders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Car");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("backend.Models.WorkOrderService", b =>
@@ -474,8 +461,6 @@ namespace backend.Data.Migrations
             modelBuilder.Entity("backend.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cars");
-
-                    b.Navigation("WorkOrders");
                 });
 
             modelBuilder.Entity("backend.Models.Car", b =>
