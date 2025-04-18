@@ -14,5 +14,6 @@ namespace backend.Models
         public ICollection<Car> Cars { get; set; } = new List<Car>();
 
         public ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
+        public ICollection<MechanicAvailability> MechanicAvailabilities { get; set; } = new List<MechanicAvailability>();
     }
 }

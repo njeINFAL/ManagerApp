@@ -13,7 +13,11 @@ namespace backend.Controllers
             _context = context;
         }
         [HttpGet("available")]
-        public ActionResult GetAvailableSlots(DateTime date) {
-
+        public ActionResult GetAvailableSlots(DateTime date)
+        {
+            return null;
+            //TODO
+        }
     }
+
 }

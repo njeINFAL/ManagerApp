@@ -7,7 +7,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Car> Cars => Set<Car>();
     public DbSet<Holiday> Holidays => Set<Holiday>();
-
+    public DbSet<MechanicAvailability> MechanicAvailabilities => Set<MechanicAvailability>();
     public DbSet<Service> Services => Set<Service>();
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
     public DbSet<WorkOrderService> WorkOrderServicess => Set<WorkOrderService>();
@@ -61,6 +61,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
            .HasForeignKey(w => w.UserId)
            .OnDelete(DeleteBehavior.SetNull);
 
+        //ApplicationUser - MechanicAvailability kapcsolat 
+        builder.Entity<MechanicAvailability>()
+            .HasOne(ma => ma.ApplicationUser)
+            .WithMany(u => u.MechanicAvailabilities)
+            .HasForeignKey(ma => ma.ApplicationUserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // non-changing holiday days
         builder.Entity<Holiday>().HasData(
             new Holiday { HolidayId = 1, Date = new DateTime(2025, 1, 1) },
             new Holiday { HolidayId = 2, Date = new DateTime(2025, 3, 15) },
