@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Car> Cars => Set<Car>();
+    public DbSet<Holiday> Holidays => Set<Holiday>();
 
     public DbSet<Service> Services => Set<Service>();
     public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
@@ -59,6 +60,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
            .WithMany(u => u.WorkOrders)
            .HasForeignKey(w => w.UserId)
            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Holiday>().HasData(
+            new Holiday { HolidayId = 1, Date = new DateTime(2025, 1, 1) },
+            new Holiday { HolidayId = 2, Date = new DateTime(2025, 3, 15) },
+            new Holiday { HolidayId = 3, Date = new DateTime(2025, 5, 1) },
+            new Holiday { HolidayId = 4, Date = new DateTime(2025, 10, 23), Description = "1956-os forradalom" },
+            new Holiday { HolidayId = 5, Date = new DateTime(2025, 11, 1) },
+            new Holiday { HolidayId = 6, Date = new DateTime(2025, 12, 25) },
+            new Holiday { HolidayId = 7, Date = new DateTime(2025, 12, 26) }
+            );
     }
 
 
