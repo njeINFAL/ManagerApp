@@ -1,4 +1,7 @@
-﻿namespace backend.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
+namespace backend.Models
 {
     public class WorkOrder
     {
@@ -16,8 +19,14 @@
         public int? CarId { get; set; }
         public Car? Car { get; set; }
 
-        public string? UserId { get; set; }
-        public ApplicationUser? User { get; set; }
+        // User Id with two roles
+        public string? ClientId { get; set; }
+        [ForeignKey("ClientId")]
+        public ApplicationUser? Client { get; set; }
+
+        public string? MechanicId { get; set; }
+        [ForeignKey("MechanicId")]
+        public ApplicationUser? Mechanic { get; set; }
 
         public ICollection<WorkOrderService> WorkOrderServices { get; set; } = new List<WorkOrderService>();
     }

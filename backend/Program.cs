@@ -1,3 +1,4 @@
+using backend;
 using backend.Data;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
@@ -40,6 +41,7 @@ using (var scope = app.Services.CreateScope())
     await IdentityInitializer.SeedRolesAndAdminAsync(services);
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -53,6 +55,18 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
+
+if (app.Environment.IsDevelopment())
+{
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        await DBInitializer.SeedDemoAsync(services);
+    }
+}
+
 
 app.Run();
 

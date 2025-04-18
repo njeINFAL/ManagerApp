@@ -55,11 +55,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .Property(wos => wos.Status)
             .HasConversion<string>();
 
+        // WorkOrder for Client and Mechanic Role
         builder.Entity<WorkOrder>()
-           .HasOne(w => w.User)
-           .WithMany(u => u.WorkOrders)
-           .HasForeignKey(w => w.UserId)
+           .HasOne(w => w.Client)
+           .WithMany(u => u.ClientWorkOrders)
+           .HasForeignKey(w => w.ClientId)
            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<WorkOrder>()
+           .HasOne(w => w.Mechanic)
+           .WithMany(u => u.MechanicWorkOrders)
+           .HasForeignKey(w => w.MechanicId)
+           .OnDelete(DeleteBehavior.NoAction);
 
         //ApplicationUser - MechanicAvailability kapcsolat 
         builder.Entity<MechanicAvailability>()
