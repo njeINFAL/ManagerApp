@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\avess\\source\\repos\\ManagerApp\\backend\\backend.csproj": {}
+    "C:\\Users\\Feri\\Source\\Repos\\ManagerApp\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\avess\\source\\repos\\ManagerApp\\backend\\backend.csproj": {
+    "C:\\Users\\Feri\\Source\\Repos\\ManagerApp\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\avess\\source\\repos\\ManagerApp\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\Feri\\Source\\Repos\\ManagerApp\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\avess\\source\\repos\\ManagerApp\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\avess\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\avess\\source\\repos\\ManagerApp\\backend\\obj\\",
+        "projectPath": "C:\\Users\\Feri\\Source\\Repos\\ManagerApp\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\Feri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Feri\\Source\\Repos\\ManagerApp\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\avess\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Feri\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,11 +45,25 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -68,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

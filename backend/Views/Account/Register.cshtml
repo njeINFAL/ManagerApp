@@ -1,0 +1,15 @@
+﻿@model RegisterViewModel
+
+<h2>Regisztráció</h2>
+<form asp-action="Register" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div>
+        <label>Jelszó</label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+    
+    <button type="submit" class="btn btn-success">Regisztráció</button>
+</form>
