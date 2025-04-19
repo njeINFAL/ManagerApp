@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\mechanic\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\mechanic\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\controllers\\mechaniccontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -43,10 +51,6 @@
       "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:models\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|c:\\users\\feri\\source\\repos\\managerapp\\backend\\models\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EF373F7-D026-43BF-9C9E-3BDF37B577CD}|backend.csproj|solutionrelative:models\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -66,15 +70,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 15,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-19T19:19:28.174Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -82,12 +103,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:53:30.333Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:53:30.333Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "RegisterViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Models\\RegisterViewModel.cs",
               "RelativeDocumentMoniker": "Models\\RegisterViewModel.cs",
@@ -95,12 +115,11 @@
               "RelativeToolTip": "Models\\RegisterViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:52:12.528Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:52:12.528Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "LoginViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Models\\LoginViewModel.cs",
               "RelativeDocumentMoniker": "Models\\LoginViewModel.cs",
@@ -108,12 +127,11 @@
               "RelativeToolTip": "Models\\LoginViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:51:39.137Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:51:39.137Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 2,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
@@ -126,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "CustomerController.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Controllers\\CustomerController.cs",
               "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
@@ -134,12 +152,11 @@
               "RelativeToolTip": "Controllers\\CustomerController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:49:42.519Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:49:42.519Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "MechanicController.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Controllers\\MechanicController.cs",
               "RelativeDocumentMoniker": "Controllers\\MechanicController.cs",
@@ -147,12 +164,11 @@
               "RelativeToolTip": "Controllers\\MechanicController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:49:26.523Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:49:26.523Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "AdminController.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
@@ -160,12 +176,11 @@
               "RelativeToolTip": "Controllers\\AdminController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:49:11.643Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:49:11.643Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
@@ -173,12 +188,11 @@
               "RelativeToolTip": "Controllers\\AccountController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-19T18:48:55.589Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:48:55.589Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Customer\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Customer\\Index.cshtml",
@@ -186,12 +200,11 @@
               "RelativeToolTip": "Views\\Customer\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-19T18:48:26.099Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:48:26.099Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Mechanic\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Mechanic\\Index.cshtml",
@@ -199,12 +212,11 @@
               "RelativeToolTip": "Views\\Mechanic\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-19T18:47:41.004Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:47:41.004Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Admin\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\Index.cshtml",
@@ -212,38 +224,36 @@
               "RelativeToolTip": "Views\\Admin\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-19T18:47:32.55Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:47:32.55Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "Register.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Account\\Register.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
-              "ToolTip": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Account\\Register.cshtml*",
-              "RelativeToolTip": "Views\\Account\\Register.cshtml*",
+              "ToolTip": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "Views\\Account\\Register.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-19T18:46:34.841Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:46:34.841Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Login.cshtml",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Account\\Login.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
               "ToolTip": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\Views\\Account\\Login.cshtml",
               "RelativeToolTip": "Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-04-19T18:46:21.385Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Feri\\source\\repos\\ManagerApp\\backend\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -251,8 +261,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-19T18:42:43.487Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-19T18:42:43.487Z"
             }
           ]
         }
