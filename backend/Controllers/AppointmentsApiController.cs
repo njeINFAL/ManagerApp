@@ -10,11 +10,11 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentsController : ControllerBase
+    public class AppointmentsApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public AppointmentsController(ApplicationDbContext context)
+        public AppointmentsApiController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace backend.Controllers
                 return BadRequest(ModelState);
 
             // check if selected date is not in the past
-            if (date <= DateTime.Now)
+            if (date <= DateTime.Now.Date)
                 return BadRequest("Nem lehet múltbeli időpontra foglalni");
 
             // check holidays
@@ -103,7 +103,6 @@ namespace backend.Controllers
         public async Task<ActionResult<WorkOrderDetails>> GetWorkOrder(int id)
         {
             var workOrder = await _context.WorkOrders
-                .Include(w => w.Car)
                 .Include(w => w.Client)
                 .Include(w => w.Mechanic)
                 .Include(w => w.WorkOrderServices)
@@ -191,7 +190,7 @@ namespace backend.Controllers
                 CreatedAt = DateTime.Now,
                 IsActive = true,
                 Notes = request.Notes,
-                CarId = request.CarId,
+                //CarId = request.CarId,
                 ClientId = userId,
                 MechanicId = availableMechanicId.First()
                 // TODO: szerelő hozzárendelésen még finomítani kell :D

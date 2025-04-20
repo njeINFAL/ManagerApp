@@ -9,7 +9,7 @@ namespace backend.DTOs
         public int WorkOrderId { get; set; }
 
         [Required]
-        public int CarId { get; set; }
+        public int? CarId { get; set; }
 
         [StringLength(500)]
         public string? Notes { get; set; }

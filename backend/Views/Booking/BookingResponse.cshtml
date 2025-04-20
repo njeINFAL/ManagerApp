@@ -1,0 +1,25 @@
+﻿@model backend.DTOs.AppointmentResponse
+
+@{
+    ViewData["Title"] = "Foglalás visszajelzés";
+    var isSuccess = Model != null;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (isSuccess)
+{
+    <div class="alert alert-success">
+        <strong>Sikeres foglalás!</strong><br />
+        Foglalási azonosító: <strong>@Model.WorkOrderId</strong><br />
+        Időpont: <strong>@Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>@ViewBag.ErrorMessage ?? "Ismeretlen hiba történt."</strong>
+    </div>
+}
+
+<a href="@Url.Action("Book", "Booking")" class="btn btn-primary">Új időpont foglalása</a>
