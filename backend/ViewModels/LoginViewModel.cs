@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Models
+namespace backend.ViewModels
 {
     public class LoginViewModel : Controller
     {
