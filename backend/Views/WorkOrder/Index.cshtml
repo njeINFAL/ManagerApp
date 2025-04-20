@@ -1,0 +1,82 @@
+﻿@model List<backend.Models.WorkOrder>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Szerviztörténet";
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userRoles = await UserManager.GetRolesAsync(currentUser);
+    var isAdmin = userRoles.Contains("Admin");
+    var isMechanic = userRoles.Contains("Mechanic");
+
+    // Filter data based on role
+    var displayedWorkOrders = Model;
+    if (userRoles.Contains("Client"))
+    {
+        displayedWorkOrders = Model.Where(wo => wo.ClientId == currentUser.Id).ToList();
+    }
+    else if (isMechanic)
+    {
+        displayedWorkOrders = Model.Where(wo => wo.MechanicId == currentUser.Id).ToList();
+    }
+}
+
+<h2>Munkálatok Áttekintése</h2>
+
+@if (isAdmin)
+{
+    <a href="@Url.Action("Create", "WorkOrder")">Új Munkalap</a>
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Munkalap ID</th>
+            <th>Időpont</th>
+            <th>Létrehozva</th>
+            <th>Státusz</th>
+            <th>Gépjármű</th>
+            @if (isAdmin)
+            {
+                <th>Ügyfél</th>
+                <th>Szerelő</th>
+            }
+            <th>Megjegyzés</th>
+            <th>Műveletek</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workOrder in displayedWorkOrders)
+        {
+            <tr>
+                <td>@workOrder.WorkOrderId</td>
+                <td>@workOrder.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</td>
+                <td>@workOrder.CreatedAt.ToString("yyyy.MM.dd.")</td>
+                <td>@(workOrder.IsActive == true ? "Aktív" : "Inaktív")</td>
+                <td>
+                    @if (workOrder.Car != null)
+                    {
+                        <span>@workOrder.Car.Manufacturer @workOrder.Car.Type (@workOrder.Car.LicencePlate)</span>
+                    }
+                </td>
+                @if (isAdmin)
+                {
+                    <td>@(workOrder.Client?.UserName ?? "-")</td>
+                    <td>@(workOrder.Mechanic?.UserName ?? "-")</td>
+                }
+                <td>@(string.IsNullOrEmpty(workOrder.Notes) ? "-" : workOrder.Notes)</td>
+                <td>
+                    <a href="@Url.Action("Details", "WorkOrder", new { id = workOrder.WorkOrderId })">Részletek</a>
+                    @if (isAdmin || isMechanic)
+                    {
+                        <a href="@Url.Action("Edit", "WorkOrder", new { id = workOrder.WorkOrderId })">Szerkesztés</a>
+                        <form method="post" style="display:inline;" action="@Url.Action("ToggleStatus", "WorkOrder", new { id = workOrder.WorkOrderId })">
+                            @Html.AntiForgeryToken()
+                            <button type="submit">Állapot frissítés</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
