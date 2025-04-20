@@ -1,0 +1,27 @@
+﻿@model LoginViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-center text-primary">Bejelentkezés</h3>
+                    <form>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email cím</label>
+                            <input type="email" class="form-control" id="email" placeholder="pl. teszt@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Jelszó</label>
+                            <input type="password" class="form-control" id="password" placeholder="Jelszó">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Belépés</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#">Elfelejtett jelszó?</a> | <a href="#">Regisztráció</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
