@@ -1,35 +1,21 @@
 ﻿@model List<backend.Models.WorkOrder>
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Szerviztörténet";
-    var currentUser = await UserManager.GetUserAsync(User);
-    var userRoles = await UserManager.GetRolesAsync(currentUser);
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    var userRoles = UserManager.GetRolesAsync(currentUser).Result;
     var isAdmin = userRoles.Contains("Admin");
     var isMechanic = userRoles.Contains("Mechanic");
-
-    // Filter data based on role
-    var displayedWorkOrders = Model;
-    if (userRoles.Contains("Client"))
-    {
-        displayedWorkOrders = Model.Where(wo => wo.ClientId == currentUser.Id).ToList();
-    }
-    else if (isMechanic)
-    {
-        displayedWorkOrders = Model.Where(wo => wo.MechanicId == currentUser.Id).ToList();
-    }
+    var isClient = userRoles.Contains("Client");
 }
 
 <h2>Munkálatok Áttekintése</h2>
 
-@if (isAdmin)
-{
-    <a href="@Url.Action("Create", "WorkOrder")">Új Munkalap</a>
-}
-
-<table>
-    <thead>
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
         <tr>
             <th>Munkalap ID</th>
             <th>Időpont</th>
@@ -46,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var workOrder in displayedWorkOrders)
+        @foreach (var workOrder in Model)
         {
             <tr>
                 <td>@workOrder.WorkOrderId</td>
@@ -66,14 +52,10 @@
                 }
                 <td>@(string.IsNullOrEmpty(workOrder.Notes) ? "-" : workOrder.Notes)</td>
                 <td>
-                    <a href="@Url.Action("Details", "WorkOrder", new { id = workOrder.WorkOrderId })">Részletek</a>
+                    <a href="@Url.Action("Details", "WorkOrder", new { id = workOrder.WorkOrderId })" class="btn btn-sm btn-info">Részletek</a>
                     @if (isAdmin || isMechanic)
                     {
-                        <a href="@Url.Action("Edit", "WorkOrder", new { id = workOrder.WorkOrderId })">Szerkesztés</a>
-                        <form method="post" style="display:inline;" action="@Url.Action("ToggleStatus", "WorkOrder", new { id = workOrder.WorkOrderId })">
-                            @Html.AntiForgeryToken()
-                            <button type="submit">Állapot frissítés</button>
-                        </form>
+                        <a href="@Url.Action("Edit", "WorkOrder", new { id = workOrder.WorkOrderId })" class="btn btn-sm btn-warning">Szerkesztés</a>
                     }
                 </td>
             </tr>

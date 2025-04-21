@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using backend.Models;
 using backend.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -18,6 +19,7 @@ namespace backend.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Book()
         {
@@ -127,7 +129,7 @@ namespace backend.Controllers
             }
 
             ViewBag.ErrorMessage = result.ErrorMessage ?? "Sikertelen foglalás!";
-    return View("BookingResponse");
+                return View("BookingResponse");
         }
 
     }

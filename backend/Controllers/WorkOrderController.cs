@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.DTOs;
+using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class WorkOrderController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,18 +24,32 @@ namespace backend.Controllers
         // GET: WorkOrder
         public async Task<IActionResult> Index()
         {
-            var workOrders = await _context.WorkOrders
-                .Include(w => w.Car)
+            var currentUser = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+
+            var workOrdersQuery = _context.WorkOrders
+                //.Include(w => w.Car)
                 .Include(w => w.Client)
                 .Include(w => w.Mechanic)
                 .Include(w => w.WorkOrderServices)
                     .ThenInclude(wos => wos.Service)
-                .ToListAsync();
+                .AsQueryable();
 
+            if (userRoles.Contains("Client"))
+            {
+                workOrdersQuery = workOrdersQuery.Where(wo => wo.ClientId == currentUser.Id);
+            }
+            if (userRoles.Contains("Mechanic"))
+            {
+                workOrdersQuery = workOrdersQuery.Where(wo => wo.MechanicId == currentUser.Id);
+            }
+
+            var workOrders = await workOrdersQuery.ToListAsync();
             return View(workOrders);
+
         }
 
-        // GET: WorkOrder/Details/5
+        // GET: WorkOrder/Details/{id}
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -66,34 +81,128 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            return View(workOrder);
+            // Mapping to WorkOrderDeatils DTO
+            var workOrderDetails = new WorkOrderDetails
+            {
+                WorkOrderId = workOrder.WorkOrderId,
+                AppointmentTime = workOrder.AppointmentTime,
+                Notes = workOrder.Notes,
+                IsActive = workOrder.IsActive,
+                Car = workOrder.Car != null ? new CarDto
+                {
+                    LicencePlate = workOrder.Car.LicencePlate,
+                    Manufacturer = workOrder.Car.Manufacturer,
+                    Type = workOrder.Car.Type,
+                    VINnumber = workOrder.Car.VINnumber,
+                    EngineNumber = workOrder.Car.EngineNumber
+                } : null,
+                Client = workOrder.Client != null ? new UserDto
+                {
+                    FirstName = workOrder.Client.UserFirstNames,
+                    LastName = workOrder.Client.UserLastName
+                } : null,
+                Mechanic = workOrder.Mechanic != null ? new UserDto
+                {
+                    FirstName = workOrder.Mechanic.UserFirstNames,
+                    LastName = workOrder.Mechanic.UserLastName
+                } : null,
+                Services = workOrder.WorkOrderServices?.Select(wos => new ServiceDto
+                {
+                    ServiceName = wos.Service.ServiceName,
+                    ServiceDurationMinutes = wos.Service.ServiceDurationMinutes,
+                    ServicePrice = wos.Service.ServicePrice,
+                    Status = wos.Status.ToString(),
+                }).ToList() ?? new List<ServiceDto>()
+            };
+
+            return View(workOrderDetails);
+
         }
 
-        // POST: WorkOrder/ToggleStatus/5
-        [HttpPost]
+        // GET: WorkOrder/Edit/{id}
+
         [Authorize(Roles = "Admin,Mechanic")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ToggleStatus(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            var workOrder = await _context.WorkOrders.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workOrder = await _context.WorkOrders
+                .Include(w => w.Car)
+                .Include(w => w.WorkOrderServices)
+                    .ThenInclude(wos => wos.Service)
+                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
 
             if (workOrder == null)
             {
-                return Json(new { success = false, message = "Munkalap nem található." });
+                return NotFound();
             }
 
-            // Toggle status
-            workOrder.IsActive = !workOrder.IsActive;
+            // Security check for mechanics - can only edit their assigned work orders
+            var currentUser = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
 
-            try
+            if (!userRoles.Contains("Admin") &&
+                userRoles.Contains("Mechanic") &&
+                workOrder.MechanicId != currentUser.Id)
             {
-                await _context.SaveChangesAsync();
-                return Json(new { success = true });
+                return Forbid();
             }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
+
+            return View(workOrder);
         }
+
+        // POST: WorkOrder/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mechanic")]
+        public async Task<IActionResult> Edit(int id, WorkOrder workOrder)
+        {
+            if (id != workOrder.WorkOrderId)
+            {
+                return NotFound();
+            }
+
+            // Security check for mechanics - can only edit their assigned work orders
+            var currentUser = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+
+            if (!userRoles.Contains("Admin") &&
+                userRoles.Contains("Mechanic") &&
+                workOrder.MechanicId != currentUser.Id)
+            {
+                return Forbid();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(workOrder);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!WorkOrderExists(workOrder.WorkOrderId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(workOrder);
+        }
+
+        private bool WorkOrderExists(int id)
+        {
+            return _context.WorkOrders.Any(e => e.WorkOrderId == id);
+        }
+
     }
 }
