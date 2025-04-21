@@ -1,0 +1,10 @@
+#ignore 
+
+bin/
+obj/
+.DS_Store
+
+#ignore VS temp files
+.vs/
+/backend (2).zip
+/backend.zip

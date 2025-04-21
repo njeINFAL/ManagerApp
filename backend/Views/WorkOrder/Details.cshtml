@@ -1,0 +1,207 @@
+﻿@model backend.DTOs.WorkOrderDetails
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = "Munkalap részletei";
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    var userRoles = UserManager.GetRolesAsync(currentUser).Result;
+    var isAdmin = userRoles.Contains("Admin");
+    var isMechanic = userRoles.Contains("Mechanic");
+}
+
+<div class="container mt-4">
+    <h2>Munkalap részletei</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Alap információk</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Munkalap azonosító:</dt>
+                        <dd class="col-sm-8">@Model.WorkOrderId</dd>
+
+                        <dt class="col-sm-4">Időpont:</dt>
+                        <dd class="col-sm-8">@Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</dd>
+
+                        <dt class="col-sm-4">Státusz:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @(Model.IsActive == true ? "bg-success" : "bg-danger")">
+                                @(Model.IsActive == true ? "Aktív" : "Inaktív")
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Gépjármű adatok</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Car != null)
+                    {
+                        <dl class="row">
+                            <dt class="col-sm-4">Rendszám:</dt>
+                            <dd class="col-sm-8">@Model.Car.LicencePlate</dd>
+
+                            <dt class="col-sm-4">Gyártó:</dt>
+                            <dd class="col-sm-8">@Model.Car.Manufacturer</dd>
+
+                            <dt class="col-sm-4">Típus:</dt>
+                            <dd class="col-sm-8">@Model.Car.Type</dd>
+
+                            @if (!string.IsNullOrEmpty(Model.Car.VINnumber))
+                            {
+                                <dt class="col-sm-4">Alvázszám:</dt>
+                                <dd class="col-sm-8">@Model.Car.VINnumber</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Car.EngineNumber))
+                            {
+                                <dt class="col-sm-4">Motorszám:</dt>
+                                <dd class="col-sm-8">@Model.Car.EngineNumber</dd>
+                            }
+                        </dl>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Nincs gépjármű hozzárendelve.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Kapcsolattartók</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Ügyfél</h6>
+                            @if (Model.Client != null)
+                            {
+                                <p>@Model.Client.LastName @Model.Client.FirstName</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Nincs ügyfél hozzárendelve</p>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Szerelő</h6>
+                            @if (Model.Mechanic != null)
+                            {
+                                <p>@Model.Mechanic.LastName @Model.Mechanic.FirstName</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Nincs szerelő hozzárendelve</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Szolgáltatások</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Services != null && Model.Services.Any())
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Szolgáltatás</th>
+                                    <th>Időtartam (perc)</th>
+                                    <th>Ár (Ft)</th>
+                                    <th>Státusz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var service in Model.Services)
+                                {
+                                    <tr>
+                                        <td>@service.ServiceName</td>
+                                        <td>@service.ServiceDurationMinutes</td>
+                                        <td>@service.ServicePrice.ToString("N0") Ft</td>
+                                        <td>
+                                            @switch (service.Status)
+                                            {
+                                                case "Pending":
+                                                    <span class="badge bg-warning">Függőben</span>
+                                                    break;
+                                                case "InProgress":
+                                                    <span class="badge bg-info">Folyamatban</span>
+                                                    break;
+                                                case "Completed":
+                                                    <span class="badge bg-success">Befejezve</span>
+                                                    break;
+                                                case "Cancelled":
+                                                    <span class="badge bg-danger">Törölve</span>
+                                                    break;
+                                                default:
+                                                    <span class="badge bg-secondary">@service.Status</span>
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2" class="text-end">Összesen:</th>
+                                    <th>@Model.Services.Sum(s => s.ServicePrice).ToString("N0") Ft</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Nincsenek szolgáltatások hozzárendelve.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Notes))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Megjegyzések</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>@Model.Notes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "WorkOrder")" class="btn btn-secondary">Vissza a listához</a>
+        @if (isAdmin || isMechanic)
+        {
+            <a href="@Url.Action("Edit", "WorkOrder", new { id = Model.WorkOrderId })" class="btn btn-warning">Szerkesztés</a>
+        }
+    </div>
+</div>

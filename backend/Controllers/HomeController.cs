@@ -1,5 +1,8 @@
 using System.Diagnostics;
 using backend.Models;
+using backend.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -15,9 +18,23 @@ namespace backend.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+
             return View();
         }
 
+        [Authorize]
+        public async Task<IActionResult> LoggedInHome([FromServices] UserManager<ApplicationUser> userManager)
+        {
+            var user = await userManager.GetUserAsync(User);
+            var roles = await userManager.GetRolesAsync(user);
+            ViewData["UserRole"] = roles.FirstOrDefault();
+
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

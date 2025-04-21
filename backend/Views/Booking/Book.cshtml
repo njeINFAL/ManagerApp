@@ -1,0 +1,73 @@
+﻿@model BookingViewModel
+
+<h2>Időpontfoglalás</h2>
+
+<form asp-action="Book" method="post">
+    <div class="form-group">
+        <label>Dátum kiválasztása:</label>
+        <input asp-for="SelectedDate" type="date" class="form-control" id="SelectedDate"
+        min="@DateTime.Now.ToString("yyyy-mm-dd")"/>
+        @* TODO: A naptár hétfővel kezdődjön *@
+    </div>
+
+    <div class="form-group">
+        <label>Elérhető időpontok:</label>
+        <select asp-for="SelectedSlot" class="form-control" id="AvailableSlots">
+            @foreach (var slot in Model.AvailableSlots)
+            {
+                <option value="@slot.Value">@slot.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Szolgáltatások:</label><br />
+        <input type="checkbox" name="SelectedServiceIds" value="1" /> Autódiagnosztika (60 perc, 15 000 Ft)<br />
+        <input type="checkbox" name="SelectedServiceIds" value="2" /> Időszakos szerviz (60 perc, 50 000 Ft)
+    </div>
+
+    <div class="form-group">
+        <label for="Notes">Megjegyzés:</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+
+    @* <input type="hidden" asp-for="CarId" value="@Model.CarId" /> *@
+
+    <button type="submit" class="btn btn-primary">Foglalás</button>
+
+</form>
+
+@section Scripts {
+    <script>
+        // TODO: Form validálás. Submit gomb csak érvényes kitöltésénél működjön
+
+        $('#SelectedDate').on('change', function () {
+            let selectedDate = $(this).val();
+            let dropdown = $('#AvailableSlots');
+            dropdown.empty();
+
+            if (selectedDate) {
+                $.ajax({
+                    url: `/api/appointmentsapi/available?date=${selectedDate}`,
+                    type: 'GET',
+                    success: function (data) {
+                        if (data.length === 0) {
+                            dropdown.append('<option>Nincs szabad időpont</option>');
+                        } else {
+                            data.forEach(slot => {
+                                dropdown.append(
+                                    `<option value="${slot.startTime}">${slot.startTime} - ${slot.endTime} (${slot.availableMechanics} szerelő)</option>`
+                                );
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        dropdown.empty();
+                        dropdown.append('<option>Nem lehet időpontot foglalni</option>');
+                    }
+                });
+            }
+        });
+    </script>
+
+}
