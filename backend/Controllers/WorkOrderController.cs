@@ -1,5 +1,6 @@
 ﻿using backend.DTOs;
 using backend.Models;
+using backend.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -129,11 +130,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrders
-                .Include(w => w.Car)
-                .Include(w => w.WorkOrderServices)
-                    .ThenInclude(wos => wos.Service)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
+            var workOrder = await _context.WorkOrders.FindAsync(id);
 
             if (workOrder == null)
             {
@@ -151,53 +148,61 @@ namespace backend.Controllers
                 return Forbid();
             }
 
-            return View(workOrder);
+            var model = new WorkOrderEditViewModel
+            {
+                WorkOrderId = workOrder.WorkOrderId,
+                AppointmentTime = workOrder.AppointmentTime,
+                Notes = workOrder.Notes,
+                IsActive = workOrder.IsActive
+            };
+
+            return View(model);
         }
 
         // POST: WorkOrder/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Mechanic")]
-        public async Task<IActionResult> Edit(int id, WorkOrder workOrder)
+        public async Task<IActionResult> Edit(int id, WorkOrderEditViewModel model)
         {
-            if (id != workOrder.WorkOrderId)
+            if (id != model.WorkOrderId)
             {
                 return NotFound();
             }
 
-            // Security check for mechanics - can only edit their assigned work orders
-            var currentUser = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(currentUser);
-
-            if (!userRoles.Contains("Admin") &&
-                userRoles.Contains("Mechanic") &&
-                workOrder.MechanicId != currentUser.Id)
-            {
-                return Forbid();
-            }
-
             if (ModelState.IsValid)
+            { 
+
+                var workOrder = await _context.WorkOrders.FindAsync(id);
+            if (workOrder == null)
+                return NotFound();
+
+            // Updating fields in form
+            workOrder.AppointmentTime = model.AppointmentTime;
+            workOrder.Notes = model.Notes;
+            workOrder.IsActive = model.IsActive;
+
+            try
             {
-                try
-                {
-                    _context.Update(workOrder);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WorkOrderExists(workOrder.WorkOrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(workOrder);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!WorkOrderExists(model.WorkOrderId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+        return View(model);
+
+    }
 
         private bool WorkOrderExists(int id)
         {
