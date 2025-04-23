@@ -28,7 +28,7 @@ namespace backend.Controllers
             var userRoles = await _userManager.GetRolesAsync(currentUser);
 
             var workOrdersQuery = _context.WorkOrders
-                //.Include(w => w.Car)
+                .Include(w => w.Car)
                 .Include(w => w.Client)
                 .Include(w => w.Mechanic)
                 .Include(w => w.WorkOrderServices)
@@ -68,17 +68,6 @@ namespace backend.Controllers
             if (workOrder == null)
             {
                 return NotFound();
-            }
-
-            // Security check - only allow viewing if admin, assigned mechanic, or client
-            var currentUser = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(currentUser);
-
-            if (!userRoles.Contains("Admin") &&
-                workOrder.MechanicId != currentUser.Id &&
-                workOrder.ClientId != currentUser.Id)
-            {
-                return Forbid();
             }
 
             // Mapping to WorkOrderDeatils DTO
@@ -140,7 +129,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            // Security check for mechanics - can only edit their assigned work orders
+            // Security check for mechanics - they can only edit their assigned work orders
             var currentUser = await _userManager.GetUserAsync(User);
             var userRoles = await _userManager.GetRolesAsync(currentUser);
 
@@ -165,7 +154,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            // Security check for mechanics - can only edit their assigned work orders
+            // Security check for mechanics - they can only edit their assigned work orders
             var currentUser = await _userManager.GetUserAsync(User);
             var userRoles = await _userManager.GetRolesAsync(currentUser);
 
