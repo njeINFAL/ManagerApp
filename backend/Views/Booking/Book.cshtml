@@ -1,4 +1,16 @@
 ﻿@model BookingViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Időpontfoglalás";
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    var userRoles = UserManager.GetRolesAsync(currentUser).Result;
+    var isAdmin = userRoles.Contains("Admin");
+    var isMechanic = userRoles.Contains("Mechanic");
+    var isClient = userRoles.Contains("Client");
+}
 
 <h2>Időpontfoglalás</h2>
 
