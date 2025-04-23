@@ -39,7 +39,7 @@ namespace backend.Controllers
         {
             return View();
         }
-        public IActionResult Services()
+        public IActionResult OurServices()
         {
             return View();
         }
