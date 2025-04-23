@@ -5,10 +5,8 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-}
-
-a {
-  color: #0077cc;
+  font-weight: 500;
+  padding-left:0;
 }
 
 .btn-primary {
@@ -17,10 +15,16 @@ a {
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.btn-primary:hover{
+    background-color:#3a8eda;
+}
+
+.navbar .nav-link.active {
+    color: #1861ac !important;
+}
+
+navbar .container {
+    padding-left:15px;
 }
 
 .border-top {
@@ -39,10 +43,34 @@ button.accept-policy {
   line-height: inherit;
 }
 
+html{
+    height:100%;
+}
+
+body{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-bottom: 5rem !important;
+    min-height: 500px;
+}
+
 .footer {
-  position: absolute;
-  bottom: 0;
+  position:relative;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+  margin-top:auto;
 }
