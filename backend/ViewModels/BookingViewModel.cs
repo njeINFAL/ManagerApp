@@ -19,5 +19,6 @@ namespace backend.ViewModels
         public string? Notes { get; set; }
 
         public List<SelectListItem> AvailableSlots { get; set; } = new();
+        public List<SelectListItem> AvailableServices { get; set; } = new();
     }
 }

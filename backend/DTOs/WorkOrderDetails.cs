@@ -15,9 +15,9 @@
 
     public class CarDto
     {
-        public string LicencePlate { get; set; }
-        public string Manufacturer { get; set; }
-        public string Type { get; set; }
+        public string? LicencePlate { get; set; }
+        public string? Manufacturer { get; set; }
+        public string? Type { get; set; }
         public string? VINnumber { get; set; }
         public string? EngineNumber { get; set; }
     }
@@ -30,10 +30,11 @@
 
     public class ServiceDto
     {
-        public string ServiceName { get; set; }
+        public int ServiceId { get; set; }
+        public string? ServiceName { get; set; }
         public int ServiceDurationMinutes { get; set; }
         public int ServicePrice { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 }
 
