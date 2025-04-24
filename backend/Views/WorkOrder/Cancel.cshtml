@@ -1,0 +1,52 @@
+﻿
+@model backend.Models.WorkOrder
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = "Munkalap törlése";
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    var userRoles = UserManager.GetRolesAsync(currentUser).Result;
+    var isAdmin = userRoles.Contains("Admin");
+}
+
+<h3>Biztosan törli a munkalapot?</h3>
+<div>
+    <h4>Munkalap részletei</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Munkalap ID
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WorkOrderId)
+        </dd>
+        <dt class="col-sm-2">
+            Időpont
+        </dt>
+        <dd class="col-sm-10">
+            @Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")
+        </dd>
+        <dt class="col-sm-2">
+            Gépjármű
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Car != null)
+            {
+                <span>@Model.Car.Manufacturer @Model.Car.Type (@Model.Car.LicencePlate)</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Ügyfél
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Client != null ? $"{Model.Client.UserLastName} {Model.Client.UserFirstNames}" : "-")
+        </dd>
+    </dl>
+    
+    <form asp-action="Cancel">
+        <input type="hidden" asp-for="WorkOrderId" />
+        <input type="submit" value="Igen" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Nem</a>
+    </form>
+</div>
