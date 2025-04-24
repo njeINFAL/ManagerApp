@@ -27,7 +27,16 @@
 
                         <dt class="col-sm-4">Időpont:</dt>
                         <dd class="col-sm-8">@Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</dd>
+                        @if (isAdmin)
+                        {
+                            <form method="post" asp-action="UpdateAppointmentTime">
+                                <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                                <label>Időpont módosítása:</label>
+                                <input type="datetime-local" name="appointmentTime" value="@Model.AppointmentTime.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Mentés</button>
+                            </form>
 
+                        }
                         <dt class="col-sm-4">Státusz:</dt>
                         <dd class="col-sm-8">
                             <span class="badge @(Model.IsActive == true ? "bg-success" : "bg-danger")">
@@ -72,7 +81,21 @@
                     }
                     else
                     {
-                        <p class="text-muted">Nincs gépjármű hozzárendelve.</p>
+                        <form method="post" asp-action="UpdateCarDetails">
+                            <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                            <input type="hidden" name="carId" value="@Model.Car?.CarId" />
+                            <label>Rendszám:</label>
+                            <input class="form-control" name="LicencePlate" value="@Model.Car?.LicencePlate" />
+                            <label>Gyártó:</label>
+                            <input class="form-control" name="Manufacturer" value="@Model.Car?.Manufacturer" />
+                            <label>Típus:</label>
+                            <input class="form-control" name="Type" value="@Model.Car?.Type" />
+                            <label>Alvázszám:</label>
+                            <input class="form-control" name="VINnumber" value="@Model.Car?.VINnumber" />
+                            <label>Motorszám:</label>
+                            <input class="form-control" name="EngineNumber" value="@Model.Car?.EngineNumber" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Mentés</button>
+                        </form>
                     }
                 </div>
             </div>
@@ -108,6 +131,24 @@
                             {
                                 <p class="text-muted">Nincs szerelő hozzárendelve</p>
                             }
+                            @if (isAdmin)
+                            {
+                                <form method="post" asp-action="UpdateMechanic">
+                                    <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                                    <label>Új szerelő hozzárendelése:</label>
+                                    <select name="mechanicId" class="form-select">
+                                        <option value="" selected="@(Model.Mechanic == null ? "selected" : null)">-- Válassz szerelőt --</option>
+                                        @foreach (var mechanic in (List<SelectListItem>)ViewBag.Mechanics)
+                                        {
+                                            <option value="@mechanic.Value" selected="@(mechanic.Value == Model.Mechanic?.Id ? "selected" : null)">
+                                                @mechanic.Text
+                                            </option>
+                                        }
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" type="submit">Frissítés</button>
+                                </form>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -199,9 +240,5 @@
 
     <div class="mt-4">
         <a href="@Url.Action("Index", "WorkOrder")" class="btn btn-secondary">Vissza a listához</a>
-        @if (isAdmin || isMechanic)
-        {
-            <a href="@Url.Action("Edit", "WorkOrder", new { id = Model.WorkOrderId })" class="btn btn-warning">Szerkesztés</a>
-        }
     </div>
 </div>

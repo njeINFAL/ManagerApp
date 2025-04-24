@@ -2,7 +2,7 @@
 
 namespace backend.ViewModels
 {
-    public class WorkOrderEditViewModel
+    public class WorkOrderCreateViewModel
     {
     public int WorkOrderId { get; set; }
 

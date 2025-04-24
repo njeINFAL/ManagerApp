@@ -1,4 +1,6 @@
-﻿namespace backend.DTOs
+﻿using backend.Models;
+
+namespace backend.DTOs
 {
     public class WorkOrderDetails
     {
@@ -15,6 +17,7 @@
 
     public class CarDto
     {
+        public int CarId { get; set; }
         public string? LicencePlate { get; set; }
         public string? Manufacturer { get; set; }
         public string? Type { get; set; }
@@ -24,12 +27,14 @@
 
     public class UserDto
     {
+        public string? Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
     }
 
     public class ServiceDto
     {
+        public int WorkOrderServiceId { get; set; }
         public int ServiceId { get; set; }
         public string? ServiceName { get; set; }
         public int ServiceDurationMinutes { get; set; }

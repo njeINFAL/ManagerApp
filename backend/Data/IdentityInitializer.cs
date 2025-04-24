@@ -43,24 +43,60 @@ namespace backend.Data
                 }
             }
 
-            // Szerelő felhasználó
-            var mechanicEmail = "mechanic@autoszerelo.hu";
-            var mechanicUser = await userManager.FindByEmailAsync(mechanicEmail);
-            if (mechanicUser == null)
-            {
-                var newUser = new ApplicationUser
+            //// Szerelő felhasználó
+            //var mechanicEmail = "mechanic@autoszerelo.hu";
+            //var mechanicUser = await userManager.FindByEmailAsync(mechanicEmail);
+            //if (mechanicUser == null)
+            //{
+            //    var newUser = new ApplicationUser
+            //    {
+            //        UserName = mechanicEmail,
+            //        Email = mechanicEmail,
+            //        EmailConfirmed = true
+            //    };
+
+            //    string mechanicPassword = "Mechanic123!";
+            //    var createResult = await userManager.CreateAsync(newUser, mechanicPassword);
+
+            //    if (createResult.Succeeded)
+            //    {
+            //        await userManager.AddToRoleAsync(newUser, "Mechanic");
+            //    }
+            //}
+
+            // Create a list of mechanic data
+            var mechanics = new List<(string Email, string Password, string FirstName, string LastName)>
                 {
-                    UserName = mechanicEmail,
-                    Email = mechanicEmail,
-                    EmailConfirmed = true
+                    ("mechanic1@autoszerelo.hu", "Mechanic123!", "János", "Kovács"),
+                    ("mechanic2@autoszerelo.hu", "Mechanic123!", "Péter", "Nagy")
                 };
 
-                string mechanicPassword = "Mechanic123!";
-                var createResult = await userManager.CreateAsync(newUser, mechanicPassword);
-
-                if (createResult.Succeeded)
+            // Loop through the list and create each mechanic
+            foreach (var mechanic in mechanics)
+            {
+                var mechanicUser = await userManager.FindByEmailAsync(mechanic.Email);
+                if (mechanicUser == null)
                 {
-                    await userManager.AddToRoleAsync(newUser, "Mechanic");
+                    var newUser = new ApplicationUser
+                    {
+                        UserName = mechanic.Email,
+                        Email = mechanic.Email,
+                        EmailConfirmed = true,
+                        UserFirstNames = mechanic.FirstName,
+                        UserLastName = mechanic.LastName
+                    };
+
+                    var createResult = await userManager.CreateAsync(newUser, mechanic.Password);
+                    if (createResult.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(newUser, "Mechanic");
+                    }
+                    else
+                    {
+                        // Handle any errors during user creation
+                        var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                        // Log errors or handle them as needed
+                    }
                 }
             }
 
