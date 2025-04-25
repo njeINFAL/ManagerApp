@@ -105,6 +105,7 @@ namespace backend.Controllers
                 } : null,
                 Services = workOrder.WorkOrderServices?.Select(wos => new ServiceDto
                 {
+                    WorkOrderServiceId = wos.WorkOrderServiceID,
                     ServiceName = wos.Service.ServiceName,
                     ServiceDurationMinutes = wos.Service.ServiceDurationMinutes,
                     ServicePrice = wos.Service.ServicePrice,
@@ -251,8 +252,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Mechanic")]
+        [Authorize(Roles = "Admin, Mechanic")]
         public async Task<IActionResult> UpdateServiceStatus(int workOrderServiceId, string newStatus)
         {
             var wos = await _context.WorkOrderServicess.FindAsync(workOrderServiceId);
@@ -266,9 +266,10 @@ namespace backend.Controllers
 
             return RedirectToAction("Details", new { id = wos.WorkOrderId });
         }
+
+
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Mechanic")]
+        [Authorize(Roles = "Admin,Mechanic")]
         public async Task<IActionResult> Complete(int id)
         {
             var workOrder = await _context.WorkOrders.FindAsync(id);
