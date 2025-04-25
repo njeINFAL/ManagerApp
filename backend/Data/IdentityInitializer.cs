@@ -65,10 +65,10 @@ namespace backend.Data
             //}
 
             // Create a list of mechanic data
-            var mechanics = new List<(string Email, string Password, string FirstName, string LastName)>
+            var mechanics = new List<(string Email, string PhoneNumber, string Password, string FirstName, string LastName)>
                 {
-                    ("mechanic1@autoszerelo.hu", "Mechanic123!", "János", "Kovács"),
-                    ("mechanic2@autoszerelo.hu", "Mechanic123!", "Péter", "Nagy")
+                    ("mechanic1@autoszerelo.hu", "06 20 1112222", "Mechanic123!", "János", "Kovács"),
+                    ("mechanic2@autoszerelo.hu", "06 20 3334444", "Mechanic123!", "Péter", "Nagy")
                 };
 
             // Loop through the list and create each mechanic
@@ -82,6 +82,7 @@ namespace backend.Data
                         UserName = mechanic.Email,
                         Email = mechanic.Email,
                         EmailConfirmed = true,
+                        PhoneNumber = mechanic.PhoneNumber,
                         UserFirstNames = mechanic.FirstName,
                         UserLastName = mechanic.LastName
                     };
@@ -109,7 +110,8 @@ namespace backend.Data
                 {
                     UserName = clientEmail,
                     Email = clientEmail,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    PhoneNumber = "0620 1111111"
                 };
 
                 string clientPassword = "Client123!";

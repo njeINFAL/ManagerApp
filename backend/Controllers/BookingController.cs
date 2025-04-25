@@ -73,7 +73,6 @@ namespace backend.Controllers
                 CreatedAt = DateTime.Now,
                 IsActive = true,
                 Notes = request.Notes,
-                //CarId = request.CarId,
                 ClientId = userId,
                 MechanicId = availableMechanicIds.First()
             };

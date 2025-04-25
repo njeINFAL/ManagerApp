@@ -27,7 +27,7 @@
 
                         <dt class="col-sm-4">Időpont:</dt>
                         <dd class="col-sm-8">@Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</dd>
-                        @if (isAdmin)
+                        @if (Model.IsActive == true && isAdmin)
                         {
                             <form method="post" asp-action="UpdateAppointmentTime">
                                 <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
@@ -79,9 +79,10 @@
                             }
                         </dl>
                     }
-                    else
+                    else @if (Model.IsActive == true && isAdmin)
                     {
                         <form method="post" asp-action="UpdateCarDetails">
+                            <p class="text-muted">Hiányzó gépjármű adatok!</p>
                             <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
                             <input type="hidden" name="carId" value="@Model.Car?.CarId" />
                             <label>Rendszám:</label>
@@ -97,6 +98,11 @@
                             <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Mentés</button>
                         </form>
                     }
+                    else
+                    {
+                        <p class="text-muted">Nincs gépjármű hozzárendelve</p>
+                    }
+
                 </div>
             </div>
         </div>
@@ -115,6 +121,11 @@
                             @if (Model.Client != null)
                             {
                                 <p>@Model.Client.LastName @Model.Client.FirstName</p>
+                                <p>@Model.Client.PostalCode @Model.Client.City</p>
+                                <p>@Model.Client.Street @Model.Client.HouseNo</p>
+                                <p>Email: @Model.Client.Email </p>
+                                <p>Telefonszám:  @Model.Client.PhoneNumber</p>
+
                             }
                             else
                             {
@@ -126,12 +137,13 @@
                             @if (Model.Mechanic != null)
                             {
                                 <p>@Model.Mechanic.LastName @Model.Mechanic.FirstName</p>
+                                <p>Telefonszám:  @Model.Mechanic.PhoneNumber </p>
                             }
                             else
                             {
                                 <p class="text-muted">Nincs szerelő hozzárendelve</p>
                             }
-                            @if (isAdmin)
+                            @if (Model.IsActive == true && isAdmin)
                             {
                                 <form method="post" asp-action="UpdateMechanic">
                                     <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
@@ -213,10 +225,21 @@
                             </tfoot>
                         </table>
                     }
-                    else
+                    @if (Model.IsActive == true && (isAdmin || isMechanic))
                     {
-                        <p class="text-muted">Nincsenek szolgáltatások hozzárendelve.</p>
+                        <form asp-controller="WorkOrder" asp-action="AddService" method="post" class="mt-3">
+                            <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select id="serviceDropdown" name="serviceId" class="form-select"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Hozzáadás</button>
+                                </div>
+                            </div>
+                        </form>
                     }
+
                 </div>
             </div>
         </div>
@@ -242,3 +265,36 @@
         <a href="@Url.Action("Index", "WorkOrder")" class="btn btn-secondary">Vissza a listához</a>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const existingServiceNames = Array.from(document.querySelectorAll('table tbody tr td:first-child'))
+                .map(td => td.textContent.trim());
+
+            fetch('/api/ServicesApi/services')
+                .then(response => response.json())
+                .then(data => {
+                    const dropdown = document.getElementById('serviceDropdown');
+                    dropdown.innerHTML = '<option value="">-- Válassz szolgáltatást --</option>';
+
+                    data.forEach(service => {
+                        if (!existingServiceNames.includes(service.serviceName)) {
+                            const option = document.createElement('option');
+                            option.value = service.serviceId;
+                            option.text = service.serviceName;
+                            dropdown.appendChild(option);
+                        }
+                    });
+
+                    if (dropdown.options.length === 1) {
+                        dropdown.innerHTML = '<option value="">Nincs hozzáadható új szolgáltatás</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Hiba a szolgáltatások lekérésekor:', error);
+                });
+        });
+    </script>
+}
+
