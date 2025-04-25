@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace backend.Models
+﻿namespace backend.Models
 {
     public class Car
     {
