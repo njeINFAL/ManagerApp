@@ -1,6 +1,5 @@
 ﻿using backend.DTOs;
 using backend.Models;
-using backend.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -101,12 +100,19 @@ namespace backend.Controllers
                 Client = workOrder.Client != null ? new UserDto
                 {
                     FirstName = workOrder.Client.UserFirstNames,
-                    LastName = workOrder.Client.UserLastName
+                    LastName = workOrder.Client.UserLastName,
+                    City = workOrder.Client.UserCity,
+                    PostalCode = workOrder.Client.UserPostalCode,
+                    Street = workOrder.Client.UserStreet,
+                    HouseNo = workOrder.Client.UserHouseNo,
+                    Email = workOrder.Client.Email,
+                    PhoneNumber = workOrder.Client.PhoneNumber
                 } : null,
                 Mechanic = workOrder.Mechanic != null ? new UserDto
                 {
                     FirstName = workOrder.Mechanic.UserFirstNames,
-                    LastName = workOrder.Mechanic.UserLastName
+                    LastName = workOrder.Mechanic.UserLastName,
+                    PhoneNumber = workOrder.Mechanic.PhoneNumber
                 } : null,
                 Services = workOrder.WorkOrderServices?.Select(wos => new ServiceDto
                 {
@@ -157,6 +163,7 @@ namespace backend.Controllers
         // POST:WorkOrder/Details/{id}
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAppointmentTime(int workOrderId, DateTime appointmentTime)
         {
             var order = await _context.WorkOrders.FindAsync(workOrderId);
@@ -182,24 +189,81 @@ namespace backend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCarDetails(int workOrderId, string licencePlate, string manufacturer, string type, string VINnumber, string engineNumber)
         {
             var order = await _context.WorkOrders
                 .Include(o => o.Car)
                 .FirstOrDefaultAsync(o => o.WorkOrderId == workOrderId);
 
-            if (order?.Car == null) return NotFound();
+            if (order == null) return NotFound();
 
-            order.Car.LicencePlate = licencePlate;
-            order.Car.Manufacturer = manufacturer;
-            order.Car.Type = type;
-            order.Car.VINnumber = VINnumber;
-            order.Car.EngineNumber = engineNumber;
+            //create new car if not exists
 
-            await _context.SaveChangesAsync();
+            if (order.Car == null)
+            {
+                var car = new Car
+                {
+                    LicencePlate = licencePlate,
+                    Manufacturer = manufacturer,
+                    Type = type,
+                    VINnumber = VINnumber,
+                    EngineNumber = engineNumber,
+                    ApplicationUserId = order.ClientId
+                };
+
+                // Add new car to database
+                _context.Cars.Add(car);
+                await _context.SaveChangesAsync();
+
+                // Link the car to the workorder
+                order.CarId = car.CarId;
+                _context.WorkOrders.Update(order);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                order.Car.LicencePlate = licencePlate;
+                order.Car.Manufacturer = manufacturer;
+                order.Car.Type = type;
+                order.Car.VINnumber = VINnumber;
+                order.Car.EngineNumber = engineNumber;
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new { id = workOrderId });
+            }
             return RedirectToAction("Details", new { id = workOrderId });
         }
+
         [HttpPost]
+        [Authorize(Roles = "Admin,Mechanic")]
+        public async Task<IActionResult> AddService(int workOrderId, int serviceId)
+        {
+            var service = await _context.Services.FindAsync(serviceId);
+            if (service == null) return NotFound();
+
+            var exists = await _context.WorkOrderServicess
+                .AnyAsync(wos => wos.WorkOrderId == workOrderId && wos.ServiceId == serviceId);
+
+            if (exists)
+                return RedirectToAction("Details", new { id = workOrderId });
+
+            var newWos = new WorkOrderService
+            {
+                WorkOrderId = workOrderId,
+                ServiceId = serviceId,
+                Status = WorkOrderServiceStatus.Pending
+            };
+
+            _context.WorkOrderServicess.Add(newWos);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = workOrderId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Mechanic")]
         public async Task<IActionResult> UpdateServiceStatus(int workOrderServiceId, string newStatus)
         {
             var wos = await _context.WorkOrderServicess.FindAsync(workOrderServiceId);
@@ -214,6 +278,8 @@ namespace backend.Controllers
             return RedirectToAction("Details", new { id = wos.WorkOrderId });
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Mechanic")]
         public async Task<IActionResult> Complete(int id)
         {
             var workOrder = await _context.WorkOrders.FindAsync(id);
