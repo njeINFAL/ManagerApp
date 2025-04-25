@@ -7,6 +7,7 @@ using backend.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
+
 namespace backend.Controllers
 {
     public class BookingController : Controller
@@ -21,13 +22,24 @@ namespace backend.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Book()
+        public async Task<IActionResult> Book()
         {
+
+            var services = await _context.Services
+                .Select( s => new SelectListItem
+                {
+                    Value = s.ServiceId.ToString(),
+                    Text = $"{s.ServiceName} ({s.ServiceDurationMinutes} perc, {s.ServicePrice} Ft)"
+                })
+                .ToListAsync();
+
+
             var model = new BookingViewModel
             {
                 //CarId = new int(),
                 SelectedServiceIds = new List<int>(),
-                AvailableSlots = new List<SelectListItem>()
+                AvailableSlots = new List<SelectListItem>(),
+                AvailableServices = services
             };
             return View(model);
         }
@@ -61,7 +73,6 @@ namespace backend.Controllers
                 CreatedAt = DateTime.Now,
                 IsActive = true,
                 Notes = request.Notes,
-                //CarId = request.CarId,
                 ClientId = userId,
                 MechanicId = availableMechanicIds.First()
             };

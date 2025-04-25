@@ -1,5 +1,6 @@
 ﻿@model backend.DTOs.WorkOrderDetails
 @using Microsoft.AspNetCore.Identity
+@using backend.Models
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @{
@@ -27,7 +28,16 @@
 
                         <dt class="col-sm-4">Időpont:</dt>
                         <dd class="col-sm-8">@Model.AppointmentTime.ToString("yyyy.MM.dd. HH:mm")</dd>
+                        @if (Model.IsActive == true && isAdmin)
+                        {
+                            <form method="post" asp-action="UpdateAppointmentTime">
+                                <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                                <label>Időpont módosítása:</label>
+                                <input type="datetime-local" name="appointmentTime" value="@Model.AppointmentTime.ToString("yyyy-MM-ddTHH:mm")" class="form-control" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Mentés</button>
+                            </form>
 
+                        }
                         <dt class="col-sm-4">Státusz:</dt>
                         <dd class="col-sm-8">
                             <span class="badge @(Model.IsActive == true ? "bg-success" : "bg-danger")">
@@ -70,10 +80,30 @@
                             }
                         </dl>
                     }
+                    else @if (Model.IsActive == true && isAdmin)
+                    {
+                        <form method="post" asp-action="UpdateCarDetails">
+                            <p class="text-muted">Hiányzó gépjármű adatok!</p>
+                            <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                            <input type="hidden" name="carId" value="@Model.Car?.CarId" />
+                            <label>Rendszám:</label>
+                            <input class="form-control" name="LicencePlate" value="@Model.Car?.LicencePlate" />
+                            <label>Gyártó:</label>
+                            <input class="form-control" name="Manufacturer" value="@Model.Car?.Manufacturer" />
+                            <label>Típus:</label>
+                            <input class="form-control" name="Type" value="@Model.Car?.Type" />
+                            <label>Alvázszám:</label>
+                            <input class="form-control" name="VINnumber" value="@Model.Car?.VINnumber" />
+                            <label>Motorszám:</label>
+                            <input class="form-control" name="EngineNumber" value="@Model.Car?.EngineNumber" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary mt-2">Mentés</button>
+                        </form>
+                    }
                     else
                     {
-                        <p class="text-muted">Nincs gépjármű hozzárendelve.</p>
+                        <p class="text-muted">Nincs gépjármű hozzárendelve</p>
                     }
+
                 </div>
             </div>
         </div>
@@ -92,6 +122,11 @@
                             @if (Model.Client != null)
                             {
                                 <p>@Model.Client.LastName @Model.Client.FirstName</p>
+                                <p>@Model.Client.PostalCode @Model.Client.City</p>
+                                <p>@Model.Client.Street @Model.Client.HouseNo</p>
+                                <p>Email: @Model.Client.Email </p>
+                                <p>Telefonszám:  @Model.Client.PhoneNumber</p>
+
                             }
                             else
                             {
@@ -103,11 +138,30 @@
                             @if (Model.Mechanic != null)
                             {
                                 <p>@Model.Mechanic.LastName @Model.Mechanic.FirstName</p>
+                                <p>Telefonszám:  @Model.Mechanic.PhoneNumber </p>
                             }
                             else
                             {
                                 <p class="text-muted">Nincs szerelő hozzárendelve</p>
                             }
+                            @if (Model.IsActive == true && isAdmin)
+                            {
+                                <form method="post" asp-action="UpdateMechanic">
+                                    <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                                    <label>Új szerelő hozzárendelése:</label>
+                                    <select name="mechanicId" class="form-select">
+                                        <option value="" selected="@(Model.Mechanic == null ? "selected" : null)">-- Válassz szerelőt --</option>
+                                        @foreach (var mechanic in (List<SelectListItem>)ViewBag.Mechanics)
+                                        {
+                                            <option value="@mechanic.Value" selected="@(mechanic.Value == Model.Mechanic?.Id ? "selected" : null)">
+                                                @mechanic.Text
+                                            </option>
+                                        }
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" type="submit">Frissítés</button>
+                                </form>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -141,25 +195,43 @@
                                         <td>@service.ServiceDurationMinutes</td>
                                         <td>@service.ServicePrice.ToString("N0") Ft</td>
                                         <td>
-                                            @switch (service.Status)
+                                            @if (Model.IsActive == true && (isAdmin || isMechanic))
                                             {
-                                                case "Pending":
-                                                    <span class="badge bg-warning">Függőben</span>
-                                                    break;
-                                                case "InProgress":
-                                                    <span class="badge bg-info">Folyamatban</span>
-                                                    break;
-                                                case "Completed":
-                                                    <span class="badge bg-success">Befejezve</span>
-                                                    break;
-                                                case "Cancelled":
-                                                    <span class="badge bg-danger">Törölve</span>
-                                                    break;
-                                                default:
-                                                    <span class="badge bg-secondary">@service.Status</span>
-                                                    break;
+                                                <form asp-controller="WorkOrder" asp-action="UpdateServiceStatus" method="post" class="d-flex align-items-center">
+                                                    <input type="hidden" name="workOrderServiceId" value="@service.WorkOrderServiceId" />
+                                                    <select name="newStatus" class="form-select form-select-sm me-2">
+                                                        @foreach (var status in Enum.GetNames(typeof(backend.Models.WorkOrderServiceStatus)))
+                                                        {
+                                                            <option value="@status" selected="@(status == service.Status ? "selected" : null)">@status
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">✔</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                @switch (service.Status)
+                                                {
+                                                    case "Pending":
+                                                        <span class="badge bg-warning">Függőben</span>
+                                                        break;
+                                                    case "InProgress":
+                                                        <span class="badge bg-info">Folyamatban</span>
+                                                        break;
+                                                    case "Completed":
+                                                        <span class="badge bg-success">Befejezve</span>
+                                                        break;
+                                                    case "Cancelled":
+                                                        <span class="badge bg-danger">Törölve</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@service.Status</span>
+                                                        break;
+                                                }
                                             }
                                         </td>
+
                                     </tr>
                                 }
                             </tbody>
@@ -172,10 +244,21 @@
                             </tfoot>
                         </table>
                     }
-                    else
+                    @if (Model.IsActive == true && (isAdmin || isMechanic))
                     {
-                        <p class="text-muted">Nincsenek szolgáltatások hozzárendelve.</p>
+                        <form asp-controller="WorkOrder" asp-action="AddService" method="post" class="mt-3">
+                            <input type="hidden" name="workOrderId" value="@Model.WorkOrderId" />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select id="serviceDropdown" name="serviceId" class="form-select"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Hozzáadás</button>
+                                </div>
+                            </div>
+                        </form>
                     }
+
                 </div>
             </div>
         </div>
@@ -199,9 +282,38 @@
 
     <div class="mt-4">
         <a href="@Url.Action("Index", "WorkOrder")" class="btn btn-secondary">Vissza a listához</a>
-        @if (isAdmin || isMechanic)
-        {
-            <a href="@Url.Action("Edit", "WorkOrder", new { id = Model.WorkOrderId })" class="btn btn-warning">Szerkesztés</a>
-        }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const existingServiceNames = Array.from(document.querySelectorAll('table tbody tr td:first-child'))
+                .map(td => td.textContent.trim());
+
+            fetch('/api/ServicesApi/services')
+                .then(response => response.json())
+                .then(data => {
+                    const dropdown = document.getElementById('serviceDropdown');
+                    dropdown.innerHTML = '<option value="">-- Válassz szolgáltatást --</option>';
+
+                    data.forEach(service => {
+                        if (!existingServiceNames.includes(service.serviceName)) {
+                            const option = document.createElement('option');
+                            option.value = service.serviceId;
+                            option.text = service.serviceName;
+                            dropdown.appendChild(option);
+                        }
+                    });
+
+                    if (dropdown.options.length === 1) {
+                        dropdown.innerHTML = '<option value="">Nincs hozzáadható új szolgáltatás</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Hiba a szolgáltatások lekérésekor:', error);
+                });
+        });
+    </script>
+}
+

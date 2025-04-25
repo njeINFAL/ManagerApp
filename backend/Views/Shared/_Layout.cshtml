@@ -33,18 +33,18 @@
                             {
                                 <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="LoggedInHome">Admin felület</a></li>
                             }
+
                             else if (role == "Mechanic")
                             {
-                                <li class="nav-item"><a class="nav-link" asp-controller="LoggedInHome" asp-action="Index">Szerelő felület</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="LoggedInHome">Szerelő felület</a></li>
                             }
                             else if (role == "Client")
                             {
-                                <li class="nav-item"><a class="nav-link" asp-controller="LoggedInHome" asp-action="Index">Munkalapok</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="LoggedInHome">Ügyfél felület</a></li>
                             }
                         }
-                        <partial name="_LoginPartial" />
-                    </ul>
-                </div>
+                    <partial name="_LoginPartial" />
+                </ul>
             </div>
         </nav>
 

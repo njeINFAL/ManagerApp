@@ -1,8 +1,9 @@
-﻿using backend.DTOs;
+using backend.DTOs;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
@@ -28,7 +29,7 @@ namespace backend.Controllers
             var userRoles = await _userManager.GetRolesAsync(currentUser);
 
             var workOrdersQuery = _context.WorkOrders
-                //.Include(w => w.Car)
+                .Include(w => w.Car)
                 .Include(w => w.Client)
                 .Include(w => w.Mechanic)
                 .Include(w => w.WorkOrderServices)
@@ -70,17 +71,6 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            // Security check - only allow viewing if admin, assigned mechanic, or client
-            var currentUser = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(currentUser);
-
-            if (!userRoles.Contains("Admin") &&
-                workOrder.MechanicId != currentUser.Id &&
-                workOrder.ClientId != currentUser.Id)
-            {
-                return Forbid();
-            }
-
             // Mapping to WorkOrderDeatils DTO
             var workOrderDetails = new WorkOrderDetails
             {
@@ -99,15 +89,23 @@ namespace backend.Controllers
                 Client = workOrder.Client != null ? new UserDto
                 {
                     FirstName = workOrder.Client.UserFirstNames,
-                    LastName = workOrder.Client.UserLastName
+                    LastName = workOrder.Client.UserLastName,
+                    City = workOrder.Client.UserCity,
+                    PostalCode = workOrder.Client.UserPostalCode,
+                    Street = workOrder.Client.UserStreet,
+                    HouseNo = workOrder.Client.UserHouseNo,
+                    Email = workOrder.Client.Email,
+                    PhoneNumber = workOrder.Client.PhoneNumber
                 } : null,
                 Mechanic = workOrder.Mechanic != null ? new UserDto
                 {
                     FirstName = workOrder.Mechanic.UserFirstNames,
-                    LastName = workOrder.Mechanic.UserLastName
+                    LastName = workOrder.Mechanic.UserLastName,
+                    PhoneNumber = workOrder.Mechanic.PhoneNumber
                 } : null,
                 Services = workOrder.WorkOrderServices?.Select(wos => new ServiceDto
                 {
+                    WorkOrderServiceId = wos.WorkOrderServiceID,
                     ServiceName = wos.Service.ServiceName,
                     ServiceDurationMinutes = wos.Service.ServiceDurationMinutes,
                     ServicePrice = wos.Service.ServicePrice,
@@ -115,88 +113,192 @@ namespace backend.Controllers
                 }).ToList() ?? new List<ServiceDto>()
             };
 
-            return View(workOrderDetails);
+            var mechanicUsers = await _userManager.GetUsersInRoleAsync("Mechanic");
+            ViewBag.Mechanics = mechanicUsers.Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = u.UserLastName + " " + u.UserFirstNames
+            }).ToList();
 
+            return View(workOrderDetails);
         }
 
-        // GET: WorkOrder/Edit/{id}
-
-        [Authorize(Roles = "Admin,Mechanic")]
-        public async Task<IActionResult> Edit(int? id)
+        // GET: WorkOrder/Cancel/{id}
+        public async Task<IActionResult> Cancel(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var workOrder = await _context.WorkOrders
-                .Include(w => w.Car)
-                .Include(w => w.WorkOrderServices)
-                    .ThenInclude(wos => wos.Service)
-                .FirstOrDefaultAsync(m => m.WorkOrderId == id);
-
+            var workOrder = await _context.WorkOrders.FindAsync(id);
             if (workOrder == null)
             {
                 return NotFound();
             }
 
-            // Security check for mechanics - can only edit their assigned work orders
-            var currentUser = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(currentUser);
-
-            if (!userRoles.Contains("Admin") &&
-                userRoles.Contains("Mechanic") &&
-                workOrder.MechanicId != currentUser.Id)
-            {
-                return Forbid();
-            }
-
             return View(workOrder);
         }
 
-        // POST: WorkOrder/Edit/{id}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Mechanic")]
-        public async Task<IActionResult> Edit(int id, WorkOrder workOrder)
+
+        // GET: WorkOrder/Create
+        public IActionResult Create()
         {
-            if (id != workOrder.WorkOrderId)
+            // TODO
+
+            return View();
+        }
+
+
+        // POST:WorkOrder/Details/{id}
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateAppointmentTime(int workOrderId, DateTime appointmentTime)
+        {
+            var order = await _context.WorkOrders.FindAsync(workOrderId);
+            if (order == null) return NotFound();
+
+            order.AppointmentTime = appointmentTime;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = workOrderId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateMechanic(int workOrderId, string mechanicId)
+        {
+            var order = await _context.WorkOrders.FindAsync(workOrderId);
+            if (order == null) return NotFound();
+
+            order.MechanicId = mechanicId;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = workOrderId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateCarDetails(int workOrderId, string licencePlate, string manufacturer, string type, string VINnumber, string engineNumber)
+        {
+            var order = await _context.WorkOrders
+                .Include(o => o.Car)
+                .FirstOrDefaultAsync(o => o.WorkOrderId == workOrderId);
+
+            if (order == null) return NotFound();
+
+            //create new car if not exists
+
+            if (order.Car == null)
+            {
+                var car = new Car
+                {
+                    LicencePlate = licencePlate,
+                    Manufacturer = manufacturer,
+                    Type = type,
+                    VINnumber = VINnumber,
+                    EngineNumber = engineNumber,
+                    ApplicationUserId = order.ClientId
+                };
+
+                // Add new car to database
+                _context.Cars.Add(car);
+                await _context.SaveChangesAsync();
+
+                // Link the car to the workorder
+                order.CarId = car.CarId;
+                _context.WorkOrders.Update(order);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                order.Car.LicencePlate = licencePlate;
+                order.Car.Manufacturer = manufacturer;
+                order.Car.Type = type;
+                order.Car.VINnumber = VINnumber;
+                order.Car.EngineNumber = engineNumber;
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new { id = workOrderId });
+            }
+            return RedirectToAction("Details", new { id = workOrderId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Mechanic")]
+        public async Task<IActionResult> AddService(int workOrderId, int serviceId)
+        {
+            var service = await _context.Services.FindAsync(serviceId);
+            if (service == null) return NotFound();
+
+            var exists = await _context.WorkOrderServicess
+                .AnyAsync(wos => wos.WorkOrderId == workOrderId && wos.ServiceId == serviceId);
+
+            if (exists)
+                return RedirectToAction("Details", new { id = workOrderId });
+
+            var newWos = new WorkOrderService
+            {
+                WorkOrderId = workOrderId,
+                ServiceId = serviceId,
+                Status = WorkOrderServiceStatus.Pending
+            };
+
+            _context.WorkOrderServicess.Add(newWos);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = workOrderId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Mechanic")]
+        public async Task<IActionResult> UpdateServiceStatus(int workOrderServiceId, string newStatus)
+        {
+            var wos = await _context.WorkOrderServicess.FindAsync(workOrderServiceId);
+            if (wos == null) return NotFound();
+
+            if (!Enum.TryParse<WorkOrderServiceStatus>(newStatus, out var parsed))
+                return BadRequest();
+
+            wos.Status = parsed;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = wos.WorkOrderId });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Mechanic")]
+        public async Task<IActionResult> Complete(int id)
+        {
+            var workOrder = await _context.WorkOrders.FindAsync(id);
+            if (workOrder == null)
             {
                 return NotFound();
             }
 
-            // Security check for mechanics - can only edit their assigned work orders
-            var currentUser = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            workOrder.IsActive = false;
+            workOrder.Notes = (workOrder.Notes ?? "") + " [TELJESÍTVE]";
+            _context.Update(workOrder);
+            await _context.SaveChangesAsync();
 
-            if (!userRoles.Contains("Admin") &&
-                userRoles.Contains("Mechanic") &&
-                workOrder.MechanicId != currentUser.Id)
-            {
-                return Forbid();
-            }
+            return RedirectToAction(nameof(Index));
+        }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(workOrder);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WorkOrderExists(workOrder.WorkOrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(workOrder);
+
+        // POST: WorkOrder/Cancel/{id}
+        [HttpPost, ActionName("Cancel")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelConfirmed(int id)
+        {
+            var workOrder = await _context.WorkOrders.FindAsync(id);
+            workOrder.IsActive = false;
+            workOrder.Notes = (workOrder.Notes ?? "") + " [TÖRÖLVE]";
+            _context.Update(workOrder);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         private bool WorkOrderExists(int id)

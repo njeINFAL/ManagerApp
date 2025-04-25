@@ -14,6 +14,7 @@
 
 <h2>Munkálatok Áttekintése</h2>
 
+
 <table class="table table-striped table-hover">
     <thead class="thead-dark">
         <tr>
@@ -47,18 +48,21 @@
                 </td>
                 @if (isAdmin)
                 {
-                    <td>@(workOrder.Client?.UserName ?? "-")</td>
-                    <td>@(workOrder.Mechanic?.UserName ?? "-")</td>
+                    <td>@(workOrder.Client != null ? $"{workOrder.Client.UserLastName} {workOrder.Client.UserFirstNames}" : "-")</td>
+                    <td>@(workOrder.Mechanic != null ? $"{workOrder.Mechanic.UserLastName} {workOrder.Mechanic.UserFirstNames}" : "-")</td>
                 }
+
                 <td>@(string.IsNullOrEmpty(workOrder.Notes) ? "-" : workOrder.Notes)</td>
                 <td>
                     <a href="@Url.Action("Details", "WorkOrder", new { id = workOrder.WorkOrderId })" class="btn btn-sm btn-info">Részletek</a>
-                    @if (isAdmin || isMechanic)
+                    @if (isAdmin && workOrder.IsActive==true)
                     {
-                        <a href="@Url.Action("Edit", "WorkOrder", new { id = workOrder.WorkOrderId })" class="btn btn-sm btn-warning">Szerkesztés</a>
+                        <a href="@Url.Action("Cancel", "WorkOrder", new { id = workOrder.WorkOrderId })" class="btn btn-sm btn-warning">Törlés</a>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
