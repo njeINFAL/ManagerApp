@@ -1,5 +1,6 @@
 ﻿@model backend.DTOs.WorkOrderDetails
 @using Microsoft.AspNetCore.Identity
+@using backend.Models
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @{
@@ -194,25 +195,43 @@
                                         <td>@service.ServiceDurationMinutes</td>
                                         <td>@service.ServicePrice.ToString("N0") Ft</td>
                                         <td>
-                                            @switch (service.Status)
+                                            @if (Model.IsActive == true && (isAdmin || isMechanic))
                                             {
-                                                case "Pending":
-                                                    <span class="badge bg-warning">Függőben</span>
-                                                    break;
-                                                case "InProgress":
-                                                    <span class="badge bg-info">Folyamatban</span>
-                                                    break;
-                                                case "Completed":
-                                                    <span class="badge bg-success">Befejezve</span>
-                                                    break;
-                                                case "Cancelled":
-                                                    <span class="badge bg-danger">Törölve</span>
-                                                    break;
-                                                default:
-                                                    <span class="badge bg-secondary">@service.Status</span>
-                                                    break;
+                                                <form asp-controller="WorkOrder" asp-action="UpdateServiceStatus" method="post" class="d-flex align-items-center">
+                                                    <input type="hidden" name="workOrderServiceId" value="@service.WorkOrderServiceId" />
+                                                    <select name="newStatus" class="form-select form-select-sm me-2">
+                                                        @foreach (var status in Enum.GetNames(typeof(backend.Models.WorkOrderServiceStatus)))
+                                                        {
+                                                            <option value="@status" selected="@(status == service.Status ? "selected" : null)">@status
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">✔</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                @switch (service.Status)
+                                                {
+                                                    case "Pending":
+                                                        <span class="badge bg-warning">Függőben</span>
+                                                        break;
+                                                    case "InProgress":
+                                                        <span class="badge bg-info">Folyamatban</span>
+                                                        break;
+                                                    case "Completed":
+                                                        <span class="badge bg-success">Befejezve</span>
+                                                        break;
+                                                    case "Cancelled":
+                                                        <span class="badge bg-danger">Törölve</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@service.Status</span>
+                                                        break;
+                                                }
                                             }
                                         </td>
+
                                     </tr>
                                 }
                             </tbody>
