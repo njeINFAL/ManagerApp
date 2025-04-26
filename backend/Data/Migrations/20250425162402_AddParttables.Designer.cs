@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250425162402_AddParttables")]
+    partial class AddParttables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -376,74 +379,6 @@ namespace backend.Data.Migrations
                     b.HasIndex("PartsCategoryId");
 
                     b.ToTable("PartItems");
-
-                    b.HasData(
-                        new
-                        {
-                            PartItemId = 1,
-                            PartItemName = "Fék tárcsa",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 2,
-                            PartItemName = "Fék dob",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 3,
-                            PartItemName = "Első fékpofa",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 4,
-                            PartItemName = "Hátsó fékpofa",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 5,
-                            PartItemName = "ABS gyűrű",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 6,
-                            PartItemName = "Első fékbetét",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 7,
-                            PartItemName = "Hátső fékbetét",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 8,
-                            PartItemName = "Fékkar",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 9,
-                            PartItemName = "Féktárcsa csavar",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 10,
-                            PartItemName = "Féklopás jelző",
-                            PartsCategoryId = 1
-                        },
-                        new
-                        {
-                            PartItemId = 11,
-                            PartItemName = "Komplett fékrendszer",
-                            PartsCategoryId = 1
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.PartOrder", b =>
@@ -519,13 +454,6 @@ namespace backend.Data.Migrations
                     b.HasKey("PartsCategoryId");
 
                     b.ToTable("PartsCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            PartsCategoryId = 1,
-                            PartsCategoryName = "Fékrendszer"
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.Service", b =>
@@ -588,30 +516,6 @@ namespace backend.Data.Migrations
                     b.HasIndex("MechanicId");
 
                     b.ToTable("WorkOrders");
-
-                    b.HasData(
-                        new
-                        {
-                            WorkOrderId = 1,
-                            AppointmentTime = new DateTime(2025, 4, 29, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2025, 4, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true
-                        },
-                        new
-                        {
-                            WorkOrderId = 2,
-                            AppointmentTime = new DateTime(2025, 4, 29, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2025, 4, 25, 16, 30, 10, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
-                            Notes = "TÖRÖLVE"
-                        },
-                        new
-                        {
-                            WorkOrderId = 3,
-                            AppointmentTime = new DateTime(2025, 4, 30, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedAt = new DateTime(2025, 4, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true
-                        });
                 });
 
             modelBuilder.Entity("backend.Models.WorkOrderService", b =>

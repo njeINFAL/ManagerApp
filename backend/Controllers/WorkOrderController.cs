@@ -53,10 +53,7 @@ namespace backend.Controllers
         // GET: WorkOrder/Details/{id}
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null){return NotFound();}
 
             var workOrder = await _context.WorkOrders
                 .Include(w => w.Car)
@@ -78,6 +75,7 @@ namespace backend.Controllers
                 AppointmentTime = workOrder.AppointmentTime,
                 Notes = workOrder.Notes,
                 IsActive = workOrder.IsActive,
+
                 Car = workOrder.Car != null ? new CarDto
                 {
                     LicencePlate = workOrder.Car.LicencePlate,
@@ -86,6 +84,7 @@ namespace backend.Controllers
                     VINnumber = workOrder.Car.VINnumber,
                     EngineNumber = workOrder.Car.EngineNumber
                 } : null,
+
                 Client = workOrder.Client != null ? new UserDto
                 {
                     FirstName = workOrder.Client.UserFirstNames,
@@ -97,16 +96,18 @@ namespace backend.Controllers
                     Email = workOrder.Client.Email,
                     PhoneNumber = workOrder.Client.PhoneNumber
                 } : null,
+
                 Mechanic = workOrder.Mechanic != null ? new UserDto
                 {
                     FirstName = workOrder.Mechanic.UserFirstNames,
                     LastName = workOrder.Mechanic.UserLastName,
                     PhoneNumber = workOrder.Mechanic.PhoneNumber
                 } : null,
+
                 Services = workOrder.WorkOrderServices?.Select(wos => new ServiceDto
                 {
                     WorkOrderServiceId = wos.WorkOrderServiceID,
-                    ServiceName = wos.Service.ServiceName,
+                    ServiceName = wos.Service?.ServiceName,
                     ServiceDurationMinutes = wos.Service.ServiceDurationMinutes,
                     ServicePrice = wos.Service.ServicePrice,
                     Status = wos.Status.ToString(),
@@ -126,16 +127,11 @@ namespace backend.Controllers
         // GET: WorkOrder/Cancel/{id}
         public async Task<IActionResult> Cancel(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null){return NotFound();}
 
             var workOrder = await _context.WorkOrders.FindAsync(id);
             if (workOrder == null)
-            {
-                return NotFound();
-            }
+            { return NotFound();}
 
             return View(workOrder);
         }
@@ -284,6 +280,37 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Mechanic")]
+        public async Task<IActionResult> CreatePartOrder(int workOrderId, int PartItemId, int Quantity)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var workOrder = await _context.WorkOrders.FindAsync(workOrderId);
+            if (workOrder == null) return NotFound("Work order not found");
+
+            var partOrder = new PartOrder
+            {
+                workOrderId = workOrderId,
+                Requestor = user.UserName,
+                Mechanic = user,
+                CreatedDate = DateTime.Now,
+                Status = PartOrderStatus.Requested
+            };
+
+            partOrder.PartOrderItems.Add(new PartOrderItem
+            {
+                PartItemId = PartItemId,
+                Quantity = Quantity
+            });
+
+            _context.PartOrders.Add(partOrder);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = workOrderId });
         }
 
 
