@@ -1,0 +1,47 @@
+# Build results
+bin/
+obj/
+TestResults/
+.vs/
+
+# Rider/VS Code/Visual Studio settings
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.Generated.cs
+*.dbmdl
+
+# DotCover and other test coverage tools
+*.coverage
+*.coveragexml
+*.codecoverage
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+
+# ReSharper
+_ReSharper.*
+*.ReSharper
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# Others
+*.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
